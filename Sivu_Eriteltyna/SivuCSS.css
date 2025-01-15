@@ -1,0 +1,48 @@
+@charset "utf-8";
+		
+		nav div{
+		display: inline;
+		text-align: center;
+		width: 18%;
+		padding: 5px 0;
+		padding-left: 15px;
+		width: calc(100% + 15px);
+		margin: -15px -15px 0 -15px;
+		background-color: black;
+		}
+
+		.otsikko {
+			padding: 25px 0;
+			padding-left: 30px;
+			width: 100%;
+			margin: -15px -15px 0 -15px;
+			background-color: gray;
+			color: white;
+		}
+		
+		div {
+			border-radius: 25px;
+			padding: 25px 0;
+			margin: auto;
+			width: 20%;
+			background-color: gray;
+			color: white;
+			text-align: center;
+		}
+
+		p{
+		text-transform:none;    
+		font-size: 20px;
+		color: black;
+		font-family: "proxima-nova";
+		letter-spacing:1px;
+		text-align: center;
+		}
+		
+		h1 {
+		color: white;
+		font-size: 24px;
+		text-align: center;
+		font-size: 50px;
+		font-weight: bold;
+		}

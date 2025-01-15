@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<script type="text/javascript" src="./SivuJava.js"></script>
+	<link rel='stylesheet' type='text/css' href='./SivuCSS.css'>
+    <title>Esimerkki</title>
+  </head>
+  <body>
+    <div class="otsikko">
+		<h1>Kirjaudu sisään</h1>
+	</div>
+			
+	<div>
+	<form id="formi" method="get" onsubmit="KirjauduSisaan(event)">
+		<label for="Kayttaja">Käyttäjä:</label>
+		<input type="text" id="kayttaja" name="Kayttaja"><br><br>
+		<label for="Salasana">Salasana:</label>
+		<input type="text" id="salasana" name="Salasana"><br><br>
+		<input type="submit" value="Kirjaudu">
+	</form>
+	</div>
+		<p id="virhe">Kummatkin kohdat ovat virheellisiä.</p>
+		<p id="kayttajavirhe">Käyttäjä nimi on väärin.</p>
+		<p id="salasanavirhe">Salasana väärin.</p>
+		<p id="onnistuminen">Kirjautuminen Onnistui.</p>
+  </body>
+</html>
