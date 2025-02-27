@@ -1,7 +1,7 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
-const cors = require('cors');
+
 const path = require('path');
 
 const app = express();
@@ -9,7 +9,6 @@ const port = 3000;
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
-app.use(cors());
 
 // Connect to the database
 let db = new sqlite3.Database('./mydatabase.db', (err) => {
@@ -19,33 +18,24 @@ let db = new sqlite3.Database('./mydatabase.db', (err) => {
     console.log('Connected to the SQLite database.');
 });
 
-// Create a table if it doesn't exist and add the role column if it doesn't exist
+// Serve the HTML file for the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Create a table if it doesn't exist
 db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
-    email TEXT,
-    role TEXT
+    email TEXT
 )`);
 
-db.run(`ALTER TABLE users ADD COLUMN role TEXT`, (err) => {
-    if (err && !err.message.includes('duplicate column name')) {
-        console.error(err.message);
-    }
-});
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-// Serve the HTML file for the root URL
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-});
-
 // Endpoint to add a record
-app.post('/add-user', (req, res) => {
-    const { name, email, role } = req.body;
 
-    db.run(`INSERT INTO users(name, email, role) VALUES(?, ?, ?)`, [name, email, role], function (err) {
+app.post('/add-user', (req, res) => {
+    const { name, email } = req.body;
+
+    db.run(`INSERT INTO users(name, email) VALUES(?, ?)`, [name, email], function (err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -54,11 +44,12 @@ app.post('/add-user', (req, res) => {
 });
 
 // Endpoint to update a record
+//curl -X PUT http://localhost:3000/update-user/1 -H "Content-Type: application/json" -d '{"name": "Jane Doe", "email": "jane.doe@example.com"}'
 app.put('/update-user/:id', (req, res) => {
     const { id } = req.params;
-    const { name, email, role } = req.body;
+    const { name, email } = req.body;
 
-    db.run(`UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?`, [name, email, role, id], function(err) {
+    db.run(`UPDATE users SET name = ?, email = ? WHERE id = ?`, [name, email, id], function(err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -67,6 +58,7 @@ app.put('/update-user/:id', (req, res) => {
 });
 
 // Endpoint to get all records
+//curl http://localhost:3000/users
 app.get('/users', (req, res) => {
     db.all(`SELECT * FROM users`, [], (err, rows) => {
         if (err) {
@@ -77,6 +69,7 @@ app.get('/users', (req, res) => {
 });
 
 // Endpoint to delete a record
+//curl -X DELETE http://localhost:3000/delete-user/1
 app.delete('/delete-user/:id', (req, res) => {
     const { id } = req.params;
 
